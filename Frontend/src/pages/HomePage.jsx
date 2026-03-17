@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getAllLauncher } from '../api.js'
 import LauncherTable from '../components/LauncherTable.jsx'
 import Nav from '../components/Nav.jsx'
+import UserContext from '../context/UserContext.js'
+import { useNavigate } from 'react-router'
 
 
 export default function HomePage() {
+    const {user, setUser, isReqDone} = useContext(UserContext)
+    const navigate = useNavigate()
     const [allLauncher, setAllLauncher] = useState([])
     const [filterr, setFilter] = useState([])
     
@@ -12,13 +16,20 @@ export default function HomePage() {
 
     async function getData() {
         const data = await getAllLauncher()
+        console.log(data);
+        
         setAllLauncher(data)
         setFilter(data)
     }
 
     useEffect(() => {
-        getData()
-    }, [])
+        if(!user && isReqDone){
+            navigate("/")
+        }if(user){
+            getData()
+        }
+         
+    }, [isReqDone])
 
     function handleFilterByCity(f) {
         const data = allLauncher.filter((item)=> item.city.includes(f))
@@ -38,7 +49,7 @@ export default function HomePage() {
             <div className='home-page'>
                 <div className='filters'>
                 <input type="text" placeholder='select launcher by city:' onChange={(e) => handleFilterByCity(e.target.value)} />
-                <label htmlFor="RocketType">RocketType</label>
+                <label htmlFor="RocketType"></label>
                 <select id="RocketType" onChange={(e) => handleFilterByRocketType(e.target.value)} >
                     <option value="" disabled>select type</option>
                     <option value="Shahab3">Shahab3</option>

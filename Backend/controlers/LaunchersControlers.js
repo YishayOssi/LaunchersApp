@@ -9,7 +9,7 @@ export async function getaAllLaunchersC(req, res){
         const data = await launchersTable.find().toArray()
         return res.json(data)
     }catch(error){
-        return res.json({message: "Error fetching data!"})
+        return res.status(500).json({message: "Error fetching data!"})
     }
     
 }
@@ -54,6 +54,6 @@ export async function deleteByIdC(req, res){
         }
         return res.json({message: "good"})
     }catch(error){
-        return res.json({message: "Error fetching data!"})
+        return res.status(500).json({message: "Error fetching data!"})
     }
 }

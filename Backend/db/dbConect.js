@@ -15,4 +15,27 @@ export async function dbConnect(){
     }
 }
 
+
+export async function createAdmin(){
+    try{
+       const db = client.db("IDF")
+       const userTable = db.collection("users")
+       const admin = await userTable.findOne({user_type: "admin"})
+       if(!admin){
+        userTable.insertOne({
+            username: "yishay",
+            password: "smart",
+            email: "yishay@gmail.com",
+            user_type: "admin",
+            last_login: null
+        })
+        console.log("Create new Admin...");
+       }
+       }catch(error){
+        console.log("Administrator creation failed!");
+       }
+}
+
+
+
 export const myDB = client.db("IDF")
